@@ -1,4 +1,4 @@
-package ru.itis.kpfu.kropinov.server;
+package ru.itis.kpfu.kropinov.servlet;
 
 import ru.itis.kpfu.kropinov.repostiory.UserRepository;
 
@@ -14,11 +14,9 @@ public class SignUpServlet extends HttpServlet {
 
     private UserRepository userRepository;
 
-
-
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect("sign_up.html");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.getRequestDispatcher("sign_up.ftl").forward(req, resp);
     }
 
     @Override
@@ -26,6 +24,6 @@ public class SignUpServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         UserRepository.signUpUser(login, password);
-        resp.sendRedirect("login.html");
+        resp.sendRedirect("login");
     }
 }

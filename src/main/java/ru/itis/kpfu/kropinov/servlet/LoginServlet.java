@@ -1,4 +1,4 @@
-package ru.itis.kpfu.kropinov.server;
+package ru.itis.kpfu.kropinov.servlet;
 
 import ru.itis.kpfu.kropinov.repostiory.UserRepository;
 
@@ -16,12 +16,12 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect("login.html");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.getRequestDispatcher("login.ftl").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
@@ -39,12 +39,11 @@ public class LoginServlet extends HttpServlet {
 
                 resp.addCookie(cookie);
 
-                resp.sendRedirect("main.jsp");
+                resp.sendRedirect("main");
                 return;
             }
         }
-        resp.sendRedirect("login.html");
-
+        resp.sendRedirect("login");
     }
 
 }
