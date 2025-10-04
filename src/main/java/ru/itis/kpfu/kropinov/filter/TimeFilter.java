@@ -12,10 +12,10 @@ public class TimeFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         LocalTime now = LocalTime.now();
-        LocalTime dayStart = LocalTime.of(10, 45);
-        LocalTime dayEnd = LocalTime.of(23, 45);
+        LocalTime dayStart = LocalTime.of(4, 0);
+        LocalTime dayEnd = LocalTime.of(6, 0);
 
-        if (now.isAfter(dayEnd) && now.isBefore(dayStart)) {
+        if (!(now.isAfter(dayStart) && now.isBefore(dayEnd))) {
             res.sendRedirect("login");
         }
         chain.doFilter(req, res);

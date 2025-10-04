@@ -1,6 +1,11 @@
 package ru.itis.kpfu.kropinov.servlet;
 
+import ru.itis.kpfu.kropinov.dao.UserDao;
+import ru.itis.kpfu.kropinov.entity.User;
 import ru.itis.kpfu.kropinov.repostiory.UserRepository;
+import ru.itis.kpfu.kropinov.service.UserService;
+import ru.itis.kpfu.kropinov.service.impl.UserServiceImpl;
+import ru.itis.kpfu.kropinov.util.PasswordUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +17,7 @@ import java.io.IOException;
 @WebServlet(name = "SignUp", urlPatterns = "/sign_up")
 public class SignUpServlet extends HttpServlet {
 
-    private UserRepository userRepository;
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -23,7 +28,9 @@ public class SignUpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        UserRepository.signUpUser(login, password);
+        String name = req.getParameter("name");
+        String lastname = req.getParameter("lastname");
+        userService.signUp(name, lastname, login, password);
         resp.sendRedirect("login");
     }
 }

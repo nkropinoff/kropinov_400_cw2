@@ -5,7 +5,7 @@
 <#macro header>Login page</#macro>
 
 <#macro content>
-    <h4>Login is working only <strong> from 10.45 to 23.45 </strong> ! </h4>
+    <h4>Login is not working <strong> from 4.00 to 6.00 </strong> ! </h4>
     <form method="post" action="/login">
         Login:
         <input type="text" name="login" placeholder="type your login here">
