@@ -11,4 +11,6 @@ public interface UserService {
     void signUp(String name, String lastname, String login, String password);
 
     boolean authenticate(String login, String password);
+
+    boolean checkLoginUnique(String login);
 }

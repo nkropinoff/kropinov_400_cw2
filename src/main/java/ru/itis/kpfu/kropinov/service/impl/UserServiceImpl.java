@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
         if (user != null) return user.getPassword().equals(PasswordUtil.encrypt(password));
         return false;
     }
+
+    @Override
+    public boolean checkLoginUnique(String login) {
+        return (userDao.getByLogin(login) == null);
+    }
 }

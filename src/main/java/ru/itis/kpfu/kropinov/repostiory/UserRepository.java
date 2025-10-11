@@ -13,5 +13,4 @@ public class UserRepository {
     public static Map<String, String> getAllUsers() {
         return users;
     }
-
 }

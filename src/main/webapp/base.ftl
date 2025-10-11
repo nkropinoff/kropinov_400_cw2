@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title><@title></@title></title>
+
+    <#if .namespace.additionalHead??>
+        <@additionalHead></@additionalHead>
+    </#if>
 </head>
 
 <body>
