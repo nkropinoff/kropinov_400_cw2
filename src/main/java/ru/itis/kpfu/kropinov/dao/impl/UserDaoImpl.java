@@ -28,7 +28,8 @@ public class UserDaoImpl implements UserDao {
                                     resultSet.getString("name"),
                                     resultSet.getString("lastname"),
                                     resultSet.getString("login"),
-                                    resultSet.getString("password")
+                                    resultSet.getString("password"),
+                                    resultSet.getString("profile_image_path")
                             )
                     );
                 }
@@ -59,7 +60,8 @@ public class UserDaoImpl implements UserDao {
                         resultSet.getString("name"),
                         resultSet.getString("lastname"),
                         resultSet.getString("login"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        resultSet.getString("profile_image_path")
                 );
             }
             
@@ -71,13 +73,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void save(User user) {
-        String sql = "insert into users (name, lastname, login, password) values (?, ?, ?, ?)";
+        String sql = "insert into users (name, lastname, login, password, profile_image_path) values (?, ?, ?, ?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, user.getName());
             statement.setString(2, user.getLastname());
             statement.setString(3, user.getLogin());
             statement.setString(4, user.getPassword());
+            statement.setString(5, user.getProfileImage());
             int result = statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -26,7 +26,7 @@
 
 
 <#macro content>
-    <form method="post" action="/sign_up">
+    <form method="post" action="/sign_up" enctype="multipart/form-data">
         Input your <strong>login</strong> and <strong>password</strong> for registration.
         <br>
         <div class="my-2">
@@ -50,6 +50,8 @@
             <em>Lastname:</em>
             <input type="text" name="lastname" placeholder="type your lastname here">
         </div>
+        <br>
+        <input type="file" name="profile-image">
         <br>
         <input type="submit" value="sign up" id="submit-btn">
     </form>

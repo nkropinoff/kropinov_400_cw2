@@ -8,13 +8,18 @@ import ru.itis.kpfu.kropinov.service.impl.UserServiceImpl;
 import ru.itis.kpfu.kropinov.util.PasswordUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @WebServlet(name = "SignUp", urlPatterns = "/sign_up")
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024, maxRequestSize = 10*1024*1024)
 public class SignUpServlet extends HttpServlet {
 
     private final UserService userService = new UserServiceImpl();
@@ -30,7 +35,16 @@ public class SignUpServlet extends HttpServlet {
         String password = req.getParameter("password");
         String name = req.getParameter("name");
         String lastname = req.getParameter("lastname");
-        userService.signUp(name, lastname, login, password);
+        Part imagePart = req.getPart("profile-image");
+
+        String uploadPath = getServletContext().getRealPath("/profile-images");
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        userService.signUp(name, lastname, login, password, imagePart, uploadPath);
+
         resp.sendRedirect("login");
     }
 }
