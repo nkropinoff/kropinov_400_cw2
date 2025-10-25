@@ -37,13 +37,7 @@ public class SignUpServlet extends HttpServlet {
         String lastname = req.getParameter("lastname");
         Part imagePart = req.getPart("profile-image");
 
-        String uploadPath = getServletContext().getRealPath("/profile-images");
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        userService.signUp(name, lastname, login, password, imagePart, uploadPath);
+        userService.signUp(name, lastname, login, password, imagePart);
 
         resp.sendRedirect("login");
     }

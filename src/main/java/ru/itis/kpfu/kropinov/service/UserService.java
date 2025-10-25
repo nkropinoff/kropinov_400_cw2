@@ -4,12 +4,13 @@ import ru.itis.kpfu.kropinov.dto.UserDto;
 import ru.itis.kpfu.kropinov.entity.User;
 
 import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
     List<UserDto> getAll();
 
-    void signUp(String name, String lastname, String login, String password, Part imagePart, String uploadPath);
+    void signUp(String name, String lastname, String login, String password, Part imagePart) throws IOException;
 
     boolean authenticate(String login, String password);
 

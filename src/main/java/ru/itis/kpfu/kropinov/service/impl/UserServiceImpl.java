@@ -1,10 +1,13 @@
 package ru.itis.kpfu.kropinov.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import ru.itis.kpfu.kropinov.dao.UserDao;
 import ru.itis.kpfu.kropinov.dao.impl.UserDaoImpl;
 import ru.itis.kpfu.kropinov.dto.UserDto;
 import ru.itis.kpfu.kropinov.entity.User;
 import ru.itis.kpfu.kropinov.service.UserService;
+import ru.itis.kpfu.kropinov.util.CloudinaryUtil;
 import ru.itis.kpfu.kropinov.util.PasswordUtil;
 
 import javax.servlet.http.Part;
@@ -13,11 +16,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao = new UserDaoImpl();
+    private final Cloudinary cloudinary = CloudinaryUtil.getInstance();
     private static final String DIR_PATH = "/profile-images";
     private static final int DIRECTORIES_COUNT = 100;
 
@@ -29,33 +35,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signUp(String name, String lastname, String login, String password, Part imagePart, String uploadPath) {
-        String filename = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-        String shortPath = Math.abs(filename.hashCode() % DIRECTORIES_COUNT) + File.separator + filename;
-        String dbPath = DIR_PATH + File.separator + shortPath;
-
-        String fullFilePath = uploadPath + File.separator + shortPath;
-
-        userDao.save(new User(name, lastname, login, PasswordUtil.encrypt(password), dbPath));
-        uploadFile(imagePart, fullFilePath);
+    public void signUp(String name, String lastname, String login, String password, Part imagePart) throws IOException {
+        String secure_url = uploadFile(imagePart);
+        userDao.save(new User(name, lastname, login, PasswordUtil.encrypt(password), secure_url));
     }
 
-    private void uploadFile(Part part, String filePath) {
-        File file = new File(filePath);
-        file.getParentFile().mkdirs();
 
-        try (InputStream content = part.getInputStream();
-             FileOutputStream outputStream = new FileOutputStream(file)) {
-            file.createNewFile();
-
-            byte[] buffer = new byte[content.available()];
-            content.read(buffer);
-
-            outputStream.write(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed file upload", e);
-        }
+    private String uploadFile(Part part) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(part.getInputStream().readAllBytes(), ObjectUtils.asMap("folder", "profile-images"));
+        return (String) uploadResult.get("secure_url");
     }
 
 
